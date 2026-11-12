@@ -1,0 +1,16 @@
+import { useState } from 'react';
+import { api, dt } from '../../lib/api';
+import Crud from '../Crud';
+import { Btn, Card, Table, Err, Spinner, useLoad, useAct } from '../ui';
+export default function Pricing() {
+  const set = useLoad(() => api('/admin/settings')), act = useAct(), [edit, setEdit] = useState({});
+  return (<>
+    <Crud title="Rate card (fixed-price menu)" path="/admin/rates" defaults={{ category: 'REPAIR', active: true, sort: 100 }}
+      fields={[{ k: 'code', label: 'Code (A-Z0-9_)', create: true }, { k: 'name', label: 'Name' }, { k: 'category', label: 'Category', type: 'select', opts: ['REPAIR', 'CLEANING', 'RESTORATION'] }, { k: 'price', label: 'Price (Rs)', type: 'number' }, { k: 'cap', label: 'Max price cap (Rs)', type: 'number', hint: 'Isse upar charge nahi hoga' }, { k: 'tatDays', label: 'TAT (days)', type: 'number' }, { k: 'warrantyDays', label: 'Warranty (days)', type: 'number' }, { k: 'materials', label: 'Materials (comma)', type: 'list' }, { k: 'description', label: 'Description', type: 'textarea' }, { k: 'sort', label: 'Sort', type: 'number' }, { k: 'active', label: 'Active', type: 'bool', def: true }]}
+      filters={[{ k: 'category', label: 'Category', opts: ['REPAIR', 'CLEANING', 'RESTORATION'] }]} cols={[{ h: 'Code', f: (r) => <code>{r.code}</code> }, { h: 'Name', f: (r) => r.name }, { h: 'Cat', f: (r) => r.category }, { h: 'Price', f: (r) => `₹${r.price}` }, { h: 'Cap', f: (r) => `₹${r.cap || r.price}` }, { h: 'TAT', f: (r) => r.tatDays }, { h: 'Warranty', f: (r) => r.warrantyDays }, { h: 'On', f: (r) => (r.active ? '✓' : '✗') }]} />
+    <Crud title="Protection plans" path="/admin/plans" defaults={{ active: true }} fields={[{ k: 'code', label: 'Code', create: true }, { k: 'name', label: 'Name' }, { k: 'description', label: 'Description', type: 'textarea' }, { k: 'feePct', label: 'Fee % of declared value', type: 'number' }, { k: 'limit', label: 'Max compensation limit (Rs, jab fullDeclared off)', type: 'number' }, { k: 'fullDeclared', label: 'Full declared value (after depreciation)', type: 'bool' }, { k: 'active', label: 'Active', type: 'bool', def: true }]}
+      cols={[{ h: 'Code', f: (r) => <b>{r.code}</b> }, { h: 'Name', f: (r) => r.name }, { h: 'Fee', f: (r) => `${r.feePct}%` }, { h: 'Limit', f: (r) => (r.fullDeclared ? 'Declared value' : `₹${r.limit}`) }, { h: 'On', f: (r) => (r.active ? '✓' : '✗') }]} />
+    <Card title="Business rules (settings)"><p className="small mute">Ye saare numbers assumptions hain: pilot data ke hisaab se badlo. Har badlav audit log mein jaata hai.</p>
+      {set.busy ? <Spinner /> : <Table rows={set.d || []} cols={[{ h: 'Setting', f: (r) => <code>{r.key}</code> }, { h: 'Meaning', f: (r) => r.desc }, { h: 'Value', f: (r) => <input style={{ width: 170 }} value={edit[r.key] ?? (Array.isArray(r.value) ? r.value.join(', ') : r.value)} onChange={(e) => setEdit({ ...edit, [r.key]: e.target.value })} /> }, { h: '', f: (r) => edit[r.key] !== undefined && <Btn small onClick={() => act(async () => { await api(`/admin/settings/${r.key}`, { method: 'PUT', body: { value: edit[r.key] } }); setEdit({ ...edit, [r.key]: undefined }); set.reload(); }, 'Saved')}>Save</Btn> }]} />}</Card>
+  </>);
+}
