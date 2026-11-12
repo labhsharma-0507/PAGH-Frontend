@@ -196,8 +196,8 @@ function Dashboard({ user }) {
           <Spinner />
         ) : !active.length ? (
           <div style={{ padding: '24px 0', textAlign: 'center' }}>
-            <p className="mute">Koi active order nahi hai.</p>
-            <Link href="/check" className="btn sm" style={{ marginTop: 8 }}>Apne jootein repair ke liye check karo</Link>
+            <p className="mute">{t('noActive')}</p>
+            <Link href="/check" className="btn sm" style={{ marginTop: 8 }}>{t('startCheck')}</Link>
           </div>
         ) : (
           active.slice(0, 5).map((x) => (
