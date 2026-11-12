@@ -274,14 +274,27 @@ nav select {
 
 .btn.ghost {
   background: transparent;
-  color: var(--text-chocolate);
-  border: 1px solid var(--text-chocolate);
+  color: var(--bg-cream);
+  border: 1px solid rgba(198, 161, 107, 0.4);
   box-shadow: none;
 }
 
 .btn.ghost:hover {
-  background: var(--text-chocolate);
-  color: var(--bg-cream);
+  background: rgba(198, 161, 107, 0.2);
+  color: var(--accent-gold);
+  border-color: var(--accent-gold);
+}
+
+.btn.logout-btn {
+  background: rgba(220, 38, 38, 0.15);
+  color: #fca5a5;
+  border: 1px solid rgba(220, 38, 38, 0.35);
+}
+
+.btn.logout-btn:hover {
+  background: #dc2626;
+  color: #ffffff;
+  border-color: #dc2626;
 }
 
 .btn.danger { background: var(--bad); }

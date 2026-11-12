@@ -65,8 +65,15 @@ function Shell({ Component, pageProps }) {
                 <Link href="/notifications" className="bell" aria-label="notifications">
                   🔔{unread > 0 && <i>{unread > 9 ? '9+' : unread}</i>}
                 </Link>
-                {L('/profile', user.name?.split(' ')[0] || t('navProfile'))}
-                <button className="btn ghost sm" onClick={async () => { await logout(); r.push('/'); }}>{t('logout')}</button>
+                {L('/profile', `👤 ${user.name?.split(' ')[0] || t('navProfile')}`)}
+                <button
+                  type="button"
+                  className="btn sm logout-btn"
+                  onClick={async () => { await logout(); r.push('/'); }}
+                  title="Sign Out"
+                >
+                  🚪 Sign Out
+                </button>
               </>
             ) : (
               <Link href="/login" className="btn sm">{t('login')} / {t('signup')}</Link>
